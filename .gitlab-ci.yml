@@ -1,0 +1,92 @@
+image: node:11
+
+stages:
+  - build
+  - test
+  - docker
+
+build:api:
+  stage: build
+  before_script:
+    - cd api/
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - api/dist/
+      - api/node_modules/
+    expire_in: 1 hour
+
+build:web:
+  stage: build
+  before_script:
+    - cd web/
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - web/build/
+      - web/node_modules/
+    expire_in: 1 hour
+
+lint:api:
+  stage: test
+  before_script:
+    - cd api/
+  script:
+    - npm run lint
+
+lint:web:
+  stage: test
+  before_script:
+    - cd web/
+  script:
+    - npm run lint
+
+test:api:
+  stage: test
+  before_script:
+    - cd api/
+  script:
+    - npm run test
+
+test:web:
+  stage: test
+  before_script:
+    - cd web/
+  script:
+    - npm run test
+
+docker:api:
+  stage: docker
+  image: docker:stable
+  variables:
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:dind
+  before_script:
+    - cd api/
+    - echo "$GCR_API_KEY" | docker login --username _json_key --password-stdin https://eu.gcr.io
+  script:
+    - docker build -t bistrotime-api .
+    - docker tag bistrotime-api eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api
+    - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api
+
+docker:web:
+  stage: docker
+  image: docker:stable
+  variables:
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:dind
+  before_script:
+    - cd web/
+    - echo "$GCR_API_KEY" | docker login --username _json_key --password-stdin https://eu.gcr.io
+    - echo "REACT_APP_MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}" > .env
+    - echo "REACT_APP_BISTROTIME_API_URL=${BISTROTIME_API_URL}" > .env.production
+  script:
+    - docker build -t bistrotime-web .
+    - docker tag bistrotime-web eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web
+    - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web

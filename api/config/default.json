@@ -1,0 +1,7 @@
+{
+  "port": 8080,
+  "yelp": {
+    "radius": 100,
+    "categories": "bars"
+  }
+}

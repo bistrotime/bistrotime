@@ -1,0 +1,37 @@
+{
+  "name": "bistrotime-api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon -w src --exec \"babel-node src\"",
+    "build": "babel src -s -D -d dist",
+    "start": "NODE_ENV=production node dist",
+    "lint": "eslint src",
+    "test": "mocha tests --exit --require @babel/register"
+  },
+  "dependencies": {
+    "@turf/turf": "~5.1.6",
+    "api-error-handler": "~1.0.0",
+    "config": "~3.0.1",
+    "cors": "~2.8.5",
+    "dotenv": "~7.0.0",
+    "express": "~4.16.4",
+    "morgan": "~1.9.1",
+    "request": "~2.88.0",
+    "request-promise": "~4.2.4",
+    "winston": "~3.2.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "~7.4.3",
+    "@babel/core": "~7.4.3",
+    "@babel/node": "~7.2.2",
+    "@babel/preset-env": "~7.4.3",
+    "chai": "~4.2.0",
+    "chai-http": "~4.2.1",
+    "eslint": "~5.16.0",
+    "eslint-config-airbnb-base": "~13.1.0",
+    "eslint-plugin-import": "~2.16.0",
+    "mocha": "~6.0.2",
+    "nodemon": "~1.18.10"
+  }
+}
