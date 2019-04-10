@@ -73,6 +73,8 @@ docker:api:
     - docker build -t bistrotime-api .
     - docker tag bistrotime-api eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api
     - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api
+  only:
+    - master
 
 docker:web:
   stage: docker
@@ -90,3 +92,5 @@ docker:web:
     - docker build -t bistrotime-web .
     - docker tag bistrotime-web eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web
     - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web
+  only:
+    - master
