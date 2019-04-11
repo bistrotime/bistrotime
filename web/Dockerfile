@@ -3,7 +3,9 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm install
+# No need to run "npm install" because the
+# node_modules folder is already in the context
+
 RUN npm run build
 
 FROM nginx:1.15-alpine

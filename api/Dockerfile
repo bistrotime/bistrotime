@@ -3,18 +3,21 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm install
+# No need to run "npm install" because the
+# node_modules folder is already in the context
+
 RUN npm run build
 
 FROM node:11.11-alpine
 WORKDIR /usr/src/app
 
 COPY --from=build /usr/src/app/dist dist/
-COPY --from=build /usr/src/app/node_modules node_modules/
 
 COPY config config/
-COPY package.json .
 
-RUN npm prune --production
+COPY package.json .
+COPY package-lock.json .
+
+RUN npm install --production
 
 CMD npm run start
