@@ -1,7 +1,8 @@
+{{- $fullName := include "bistrotime-api.fullname" . -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ include "bistrotime-api.fullname" . }}
+  name: {{ $fullName }}
   labels:
     app.kubernetes.io/name: {{ include "bistrotime-api.name" . }}
     helm.sh/chart: {{ include "bistrotime-api.chart" . }}
@@ -15,7 +16,7 @@ spec:
     {{- range .Values.ingress.hosts }}
       - {{ . | quote }}
     {{- end }}
-      secretName: {{ .Chart.Name }}-tls
+      secretName: {{ .Release.Name }}-tls
   rules:
   {{- range .Values.ingress.hosts }}
     - host: {{ . | quote }}
@@ -23,6 +24,6 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: {{ include "bistrotime-api.fullname" . }}
+              serviceName: {{ $fullName }}
               servicePort: http
   {{- end }}

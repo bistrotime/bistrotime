@@ -8,3 +8,6 @@ ingress:
   hosts:
     - api.bistrotime.app
 
+tokens:
+  yelp: yelp_token
+  citymapper: citymapper_token

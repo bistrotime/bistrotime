@@ -18,10 +18,23 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "bistrotime-api.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          env:
+            - name: CITYMAPPER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bistrotime-api.fullname" . }}
+                  key: citymapper_token
+            - name: YELP_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bistrotime-api.fullname" . }}
+                  key: yelp_token
           ports:
             - name: http-alt
               containerPort: 8080

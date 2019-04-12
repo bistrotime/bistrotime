@@ -12,7 +12,7 @@ spec:
   {{- range .Values.ingress.hosts }}
     - {{ . | quote }}
   {{- end }}
-  secretName: {{ .Chart.Name }}-tls
+  secretName: {{ .Release.Name }}-tls
   issuerRef:
     name: letsencrypt
   acme:
