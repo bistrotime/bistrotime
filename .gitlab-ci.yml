@@ -111,7 +111,7 @@ deploy:api:
     entrypoint: ["/bin/sh", "-c"]
   dependencies: []
   before_script:
-    - echo "$HELM_KUBECONFIG" | base64 -D > ~/helm.kubeconfig
+    - echo "$HELM_KUBECONFIG" | base64 -d > ~/helm.kubeconfig
     - helm init --kubeconfig ~/helm.kubeconfig --client-only
   script:
     - helm version
