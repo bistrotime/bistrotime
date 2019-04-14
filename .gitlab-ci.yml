@@ -106,7 +106,9 @@ build:web:
 
 deploy:api:
   stage: deploy
-  image: linkyard/docker-helm:$HELM_VERSION
+  image:
+    name: linkyard/docker-helm:$HELM_VERSION
+    entrypoint: ["/bin/sh", "-c"]
   before_script:
     - echo "$HELM_KUBECONFIG" | base64 -D > ~/helm.kubeconfig
     - helm init --kubeconfig ~/helm.kubeconfig --client-only
