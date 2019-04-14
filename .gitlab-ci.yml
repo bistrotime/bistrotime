@@ -1,12 +1,16 @@
-image: node:11
+variables:
+  NODE_VERSION: 11.14
+  HELM_VERSION: 2.13.1
 
 stages:
   - setup
   - test
   - build
+  - deploy
 
 setup:api:
   stage: setup
+  image: node:$NODE_VERSION
   before_script:
     - cd api/
   script:
@@ -20,6 +24,7 @@ setup:api:
 
 setup:web:
   stage: setup
+  image: node:$NODE_VERSION
   before_script:
     - cd web/
   script:
@@ -33,6 +38,7 @@ setup:web:
 
 lint:api:
   stage: test
+  image: node:$NODE_VERSION
   before_script:
     - cd api/
   script:
@@ -40,6 +46,7 @@ lint:api:
 
 lint:web:
   stage: test
+  image: node:$NODE_VERSION
   before_script:
     - cd web/
   script:
@@ -47,6 +54,7 @@ lint:web:
 
 test:api:
   stage: test
+  image: node:$NODE_VERSION
   before_script:
     - cd api/
   script:
@@ -54,6 +62,7 @@ test:api:
 
 test:web:
   stage: test
+  image: node:$NODE_VERSION
   before_script:
     - cd web/
   script:
@@ -94,3 +103,13 @@ build:web:
     - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web
   only:
     - master
+
+deploy:api:
+  stage: deploy
+  image: alpine/helm:$HELM_VERSION
+  before_script:
+    - echo "$HELM_KUBECONFIG" | base64 -D > ~/helm.kubeconfig
+    - helm init --kubeconfig ~/helm.kubeconfig --client-only
+  script:
+    - helm version
+  only: master
