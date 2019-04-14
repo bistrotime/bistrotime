@@ -1,4 +1,4 @@
-FROM node:11.11 as build
+FROM node:11.14 as build
 WORKDIR /usr/src/app
 
 COPY . .
@@ -8,7 +8,7 @@ COPY . .
 
 RUN npm run build
 
-FROM node:11.11-alpine
+FROM node:11.14-alpine
 WORKDIR /usr/src/app
 
 COPY --from=build /usr/src/app/dist dist/
