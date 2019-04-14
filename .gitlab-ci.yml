@@ -1,6 +1,6 @@
 variables:
-  NODE_VERSION: 11.14
-  HELM_VERSION: 2.13.1
+  NODE_VERSION: "11.14"
+  HELM_VERSION: "2.13.1"
 
 stages:
   - setup
@@ -112,4 +112,5 @@ deploy:api:
     - helm init --kubeconfig ~/helm.kubeconfig --client-only
   script:
     - helm version
-  only: master
+  only:
+    - master
