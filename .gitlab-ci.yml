@@ -106,7 +106,7 @@ build:web:
 
 deploy:api:
   stage: deploy
-  image: alpine/helm:$HELM_VERSION
+  image: linkyard/docker-helm:$HELM_VERSION
   before_script:
     - echo "$HELM_KUBECONFIG" | base64 -D > ~/helm.kubeconfig
     - helm init --kubeconfig ~/helm.kubeconfig --client-only
