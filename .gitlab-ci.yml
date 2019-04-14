@@ -1,12 +1,12 @@
 image: node:11
 
 stages:
-  - build
+  - setup
   - test
-  - docker
+  - build
 
-build:api:
-  stage: build
+setup:api:
+  stage: setup
   before_script:
     - cd api/
   script:
@@ -18,8 +18,8 @@ build:api:
       - api/node_modules/
     expire_in: 1 hour
 
-build:web:
-  stage: build
+setup:web:
+  stage: setup
   before_script:
     - cd web/
   script:
@@ -59,8 +59,8 @@ test:web:
   script:
     - npm run test
 
-docker:api:
-  stage: docker
+build:api:
+  stage: build
   image: docker:stable
   variables:
     DOCKER_DRIVER: overlay2
@@ -76,8 +76,8 @@ docker:api:
   only:
     - master
 
-docker:web:
-  stage: docker
+build:web:
+  stage: build
   image: docker:stable
   variables:
     DOCKER_DRIVER: overlay2
