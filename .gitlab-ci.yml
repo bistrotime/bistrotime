@@ -1,7 +1,6 @@
 variables:
   NODE_VERSION: "11.14"
   HELM_VERSION: "2.13.1"
-  SUPPRESS_SUPPORT: "1"
 
 stages:
   - setup
@@ -15,8 +14,10 @@ setup:api:
   before_script:
     - cd api/
   script:
-    - npm install --no-optional
+    - npm install
     - npm run build
+  variables:
+    SUPPRESS_SUPPORT: "1"
   artifacts:
     paths:
       - api/dist/
@@ -29,7 +30,7 @@ setup:web:
   before_script:
     - cd web/
   script:
-    - npm install --no-optional
+    - npm install
     - npm run build
   artifacts:
     paths:
