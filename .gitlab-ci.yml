@@ -76,26 +76,22 @@ test:web:
     DOCKER_DRIVER: overlay2
   services:
     - docker:dind
+  before_script:
+    - echo "$GCR_API_KEY" | base64 -d | docker login --username _json_key --password-stdin https://eu.gcr.io
   only:
     - master
 
 build:api:
   extends: .build
-  before_script:
-    - cd api/
-    - echo "$GCR_API_KEY" | base64 -d | docker login --username _json_key --password-stdin https://eu.gcr.io
   script:
+    - cd api/
     - docker build -t eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api:${CI_COMMIT_SHA} .
     - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api:${CI_COMMIT_SHA}
 
 build:web:
   extends: .build
-  before_script:
-    - cd web/
-    - echo "$GCR_API_KEY" | base64 -d | docker login --username _json_key --password-stdin https://eu.gcr.io
-    - echo "REACT_APP_MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}" > .env
-    - echo "REACT_APP_BISTROTIME_API_URL=${BISTROTIME_API_URL}" > .env.production
   script:
+    - cd web/
     - docker build -t eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA} .
     - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA}
 

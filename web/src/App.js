@@ -69,7 +69,7 @@ class App extends React.Component {
       coords,
     });
 
-    fetch(`${process.env.REACT_APP_BISTROTIME_API_URL}/finder?${qs}`)
+    fetch(`${process.env.BISTROTIME_API_URL}/finder?${qs}`)
       .then(response => response.json())
       .then((data) => {
         if (!empty(data.bar)) {
@@ -101,6 +101,7 @@ class App extends React.Component {
             <Grid container spacing={40} className={classes.grid}>
               <Grid item xs={12} md={8}>
                 <ReactMapGL
+                  mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
                   {...viewport}
                   onViewportChange={vp => this.setState({ viewport: vp })}
                 >
