@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   dnsNames:
-  {{- range .Values.ingress.hosts }}
+  {{- range .Values.hosts }}
     - {{ . | quote }}
   {{- end }}
   secretName: {{ .Release.Name }}-tls
@@ -20,6 +20,6 @@ spec:
       - http01:
           ingressClass: nginx
         domains:
-        {{- range .Values.ingress.hosts }}
+        {{- range .Values.hosts }}
           - {{ . | quote }}
         {{- end }}

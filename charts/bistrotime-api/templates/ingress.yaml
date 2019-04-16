@@ -13,12 +13,12 @@ metadata:
 spec:
   tls:
     - hosts:
-    {{- range .Values.ingress.hosts }}
+    {{- range .Values.hosts }}
       - {{ . | quote }}
     {{- end }}
       secretName: {{ .Release.Name }}-tls
   rules:
-  {{- range .Values.ingress.hosts }}
+  {{- range .Values.hosts }}
     - host: {{ . | quote }}
       http:
         paths:

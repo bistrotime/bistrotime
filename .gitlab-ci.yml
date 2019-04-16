@@ -114,7 +114,11 @@ deploy:api:
     - mkdir ~/.kube
     - echo "$HELM_KUBECONFIG" | base64 -d > ~/.kube/config
     - helm init --client-only
-  script:
     - helm version
+  script:
+    - helm upgrade
+      --install bistrotime-api charts/bistrotime-api
+      --namespace bistrotime
+      --set image.tag=${CI_COMMIT_SHA}
   only:
     - master
