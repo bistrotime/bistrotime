@@ -79,7 +79,7 @@ build:api:
     - docker:dind
   before_script:
     - cd api/
-    - echo "$GCR_API_KEY" | docker login --username _json_key --password-stdin https://eu.gcr.io
+    - echo "$GCR_API_KEY" | base64 -d | docker login --username _json_key --password-stdin https://eu.gcr.io
   script:
     - docker build -t eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api:${CI_COMMIT_SHA} .
     - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api:${CI_COMMIT_SHA}
@@ -95,7 +95,7 @@ build:web:
     - docker:dind
   before_script:
     - cd web/
-    - echo "$GCR_API_KEY" | docker login --username _json_key --password-stdin https://eu.gcr.io
+    - echo "$GCR_API_KEY" | base64 -d | docker login --username _json_key --password-stdin https://eu.gcr.io
     - echo "REACT_APP_MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}" > .env
     - echo "REACT_APP_BISTROTIME_API_URL=${BISTROTIME_API_URL}" > .env.production
   script:
