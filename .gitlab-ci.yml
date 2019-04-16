@@ -99,7 +99,7 @@ build:web:
     - docker build -t eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA} .
     - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA}
 
-deploy:api:
+.deploy:
   stage: deploy
   image:
     name: alpine/helm:$HELM_VERSION
@@ -110,10 +110,15 @@ deploy:api:
     - echo "$HELM_KUBECONFIG" | base64 -d > ~/.kube/config
     - helm init --client-only
     - helm version
+  only:
+    - master
+
+deploy:api:
+  extends: .deploy
   script:
     - helm upgrade
       --install bistrotime-api charts/bistrotime-api
       --namespace bistrotime
       --set image.tag=${CI_COMMIT_SHA}
-  only:
-    - master
+      --set tokens.yelp=${YELP_TOKEN}
+      --set tokens.citymapper=${CITYMAPPER_TOKEN}
