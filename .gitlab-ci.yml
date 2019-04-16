@@ -8,14 +8,17 @@ stages:
   - build
   - deploy
 
-setup:api:
+.setup:
   stage: setup
   image: node:$NODE_VERSION
-  before_script:
-    - cd api/
   script:
     - npm install
     - npm run build
+
+setup:api:
+  extends: .setup
+  before_script:
+    - cd api/
   variables:
     SUPPRESS_SUPPORT: "1"
   artifacts:
@@ -25,74 +28,68 @@ setup:api:
     expire_in: 1 hour
 
 setup:web:
-  stage: setup
-  image: node:$NODE_VERSION
+  extends: .setup
   before_script:
     - cd web/
-  script:
-    - npm install
-    - npm run build
   artifacts:
     paths:
       - web/build/
       - web/node_modules/
     expire_in: 1 hour
 
-lint:api:
+.lint:
   stage: test
   image: node:$NODE_VERSION
-  before_script:
-    - cd api/
   script:
     - npm run lint
+
+lint:api:
+  extends: .lint
+  before_script:
+    - cd api/
 
 lint:web:
-  stage: test
-  image: node:$NODE_VERSION
+  extends: .lint
   before_script:
     - cd web/
+
+.test:
+  stage: test
+  image: node:$NODE_VERSION
   script:
-    - npm run lint
+    - npm run test
 
 test:api:
-  stage: test
-  image: node:$NODE_VERSION
+  extends: .test
   before_script:
     - cd api/
-  script:
-    - npm run test
 
 test:web:
-  stage: test
-  image: node:$NODE_VERSION
+  extends: .test
   before_script:
     - cd web/
-  script:
-    - npm run test
 
-build:api:
+.build:
   stage: build
   image: docker:stable
   variables:
     DOCKER_DRIVER: overlay2
   services:
     - docker:dind
+  only:
+    - master
+
+build:api:
+  extends: .build
   before_script:
     - cd api/
     - echo "$GCR_API_KEY" | base64 -d | docker login --username _json_key --password-stdin https://eu.gcr.io
   script:
     - docker build -t eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api:${CI_COMMIT_SHA} .
     - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api:${CI_COMMIT_SHA}
-  only:
-    - master
 
 build:web:
-  stage: build
-  image: docker:stable
-  variables:
-    DOCKER_DRIVER: overlay2
-  services:
-    - docker:dind
+  extends: .build
   before_script:
     - cd web/
     - echo "$GCR_API_KEY" | base64 -d | docker login --username _json_key --password-stdin https://eu.gcr.io
@@ -101,8 +98,6 @@ build:web:
   script:
     - docker build -t eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA} .
     - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA}
-  only:
-    - master
 
 deploy:api:
   stage: deploy
