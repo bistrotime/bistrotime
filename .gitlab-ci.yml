@@ -13,7 +13,10 @@ stages:
   image: node:$NODE_VERSION
   script:
     - npm install
-    - npm run build
+  artifacts:
+    paths:
+      - api/node_modules/
+    expire_in: 1 hour
 
 setup:api:
   extends: .setup
@@ -21,21 +24,11 @@ setup:api:
     - cd api/
   variables:
     SUPPRESS_SUPPORT: "1"
-  artifacts:
-    paths:
-      - api/dist/
-      - api/node_modules/
-    expire_in: 1 hour
 
 setup:web:
   extends: .setup
   before_script:
     - cd web/
-  artifacts:
-    paths:
-      - web/build/
-      - web/node_modules/
-    expire_in: 1 hour
 
 .lint:
   stage: test
