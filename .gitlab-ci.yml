@@ -125,6 +125,14 @@ deploy:api:
       --set tokens.yelp=${YELP_TOKEN}
       --set tokens.citymapper=${CITYMAPPER_TOKEN}
 
+deploy:web:
+  extends: .deploy
+  script:
+    - helm upgrade
+      --install bistrotime-web charts/bistrotime-web
+      --namespace bistrotime
+      --set image.tag=${CI_COMMIT_SHA}
+
 cleanup:
   stage: cleanup
   image: google/cloud-sdk:alpine

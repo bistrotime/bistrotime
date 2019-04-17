@@ -1,0 +1,8 @@
+replicaCount: 1
+
+image:
+  repository: eu.gcr.io/inspired-oath-233818/bistrotime-web
+  tag: latest
+
+hosts:
+  - bistrotime.app
