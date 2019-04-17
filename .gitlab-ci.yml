@@ -1,6 +1,7 @@
 variables:
   NODE_VERSION: "11.14"
   HELM_VERSION: "2.13.1"
+  DOCKER_REGISTRY: eu.gcr.io
 
 stages:
   - setup
@@ -79,7 +80,7 @@ test:web:
   services:
     - docker:dind
   before_script:
-    - echo "$GCP_API_KEY" | base64 -d | docker login --username _json_key --password-stdin https://eu.gcr.io
+    - echo "$GCP_API_KEY" | base64 -d | docker login --username _json_key --password-stdin https://${DOCKER_REGISTRY}
   only:
     - master
 
@@ -87,8 +88,8 @@ build:api:
   extends: .build
   script:
     - cd api/
-    - docker build -t eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api:${CI_COMMIT_SHA} .
-    - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api:${CI_COMMIT_SHA}
+    - docker build -t ${DOCKER_REGISTRY}/${GCP_PROJECT_ID}/bistrotime-api:${CI_COMMIT_SHA} .
+    - docker push ${DOCKER_REGISTRY}/${GCP_PROJECT_ID}/bistrotime-api:${CI_COMMIT_SHA}
   dependencies:
     - setup:api
 
@@ -96,8 +97,8 @@ build:web:
   extends: .build
   script:
     - cd web/
-    - docker build -t eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA} .
-    - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA}
+    - docker build -t ${DOCKER_REGISTRY}/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA} .
+    - docker push ${DOCKER_REGISTRY}/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA}
   dependencies:
     - setup:web
 
@@ -133,8 +134,8 @@ cleanup:
     - echo "$GCP_API_KEY" | base64 -d > gcp-credentials.json
     - gcloud auth activate-service-account --key-file=gcp-credentials.json
   script:
-    - ./bin/gcr-cleanup.sh eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web 3
-    - ./bin/gcr-cleanup.sh eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api 3
+    - ./bin/gcr-cleanup.sh ${DOCKER_REGISTRY}/${GCP_PROJECT_ID}/bistrotime-web 3
+    - ./bin/gcr-cleanup.sh ${DOCKER_REGISTRY}/${GCP_PROJECT_ID}/bistrotime-api 3
   when: always
   only:
     - master
