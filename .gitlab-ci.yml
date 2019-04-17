@@ -40,11 +40,16 @@ lint:api:
   extends: .lint
   before_script:
     - cd api/
+  dependencies:
+    - setup:api
+
 
 lint:web:
   extends: .lint
   before_script:
     - cd web/
+  dependencies:
+    - setup:web
 
 .test:
   stage: test
@@ -56,11 +61,15 @@ test:api:
   extends: .test
   before_script:
     - cd api/
+  dependencies:
+    - setup:api
 
 test:web:
   extends: .test
   before_script:
     - cd web/
+  dependencies:
+    - setup:web
 
 .build:
   stage: build
@@ -80,6 +89,8 @@ build:api:
     - cd api/
     - docker build -t eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api:${CI_COMMIT_SHA} .
     - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api:${CI_COMMIT_SHA}
+  dependencies:
+    - setup:api
 
 build:web:
   extends: .build
@@ -87,6 +98,8 @@ build:web:
     - cd web/
     - docker build -t eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA} .
     - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA}
+  dependencies:
+    - setup:web
 
 .deploy:
   stage: deploy
