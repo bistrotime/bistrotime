@@ -7,6 +7,7 @@ stages:
   - test
   - build
   - deploy
+  - cleanup
 
 .setup:
   stage: setup
@@ -43,7 +44,6 @@ lint:api:
   dependencies:
     - setup:api
 
-
 lint:web:
   extends: .lint
   before_script:
@@ -79,7 +79,7 @@ test:web:
   services:
     - docker:dind
   before_script:
-    - echo "$GCR_API_KEY" | base64 -d | docker login --username _json_key --password-stdin https://eu.gcr.io
+    - echo "$GCP_API_KEY" | base64 -d | docker login --username _json_key --password-stdin https://eu.gcr.io
   only:
     - master
 
@@ -124,3 +124,16 @@ deploy:api:
       --set image.tag=${CI_COMMIT_SHA}
       --set tokens.yelp=${YELP_TOKEN}
       --set tokens.citymapper=${CITYMAPPER_TOKEN}
+
+cleanup:
+  stage: cleanup
+  image: google/cloud-sdk:alpine
+  before_script:
+    - echo "$GCP_API_KEY" | base64 -d > gcp-credentials.json
+    - gcloud auth activate-service-account --key-file=gcp-credentials.json
+  script:
+    - ./bin/gcr-cleanup.sh eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web 3
+    - ./bin/gcr-cleanup.sh eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-api 3
+  when: always
+  only:
+    - master
