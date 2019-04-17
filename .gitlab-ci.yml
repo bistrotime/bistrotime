@@ -15,7 +15,7 @@ stages:
     - npm install
   artifacts:
     paths:
-      - "*/node_modules/"
+      - "*/node_modules"
     expire_in: 1 hour
 
 setup:api:
