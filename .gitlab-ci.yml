@@ -128,6 +128,7 @@ deploy:api:
 cleanup:
   stage: cleanup
   image: google/cloud-sdk:alpine
+  dependencies: []
   before_script:
     - echo "$GCP_API_KEY" | base64 -d > gcp-credentials.json
     - gcloud auth activate-service-account --key-file=gcp-credentials.json
