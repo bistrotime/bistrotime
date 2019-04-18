@@ -97,9 +97,9 @@ build:web:
   script:
     - cd web/
     - docker build
-      -e BISTROTIME_API_URL
-      -e MAPBOX_TOKEN
-      -t eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA} .
+      --build-arg BISTROTIME_API_URL
+      --build-arg MAPBOX_TOKEN
+      --tag eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA} .
     - docker push eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA}
   dependencies:
     - setup:web

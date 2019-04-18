@@ -1,6 +1,9 @@
 FROM node:11.14 as build
 WORKDIR /usr/src/app
 
+ARG BISTROTIME_API_URL
+ARG MAPBOX_TOKEN
+
 COPY . .
 
 # No need to run "npm install" because the
