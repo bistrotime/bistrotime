@@ -13,12 +13,21 @@ module.exports = {
           loader: 'babel-loader',
         },
       },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: 'images/[name].[hash].[ext]',
+          },
+        },
+      },
     ],
   },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: 'public/index.html',
+      template: 'src/index.html',
     }),
   ],
   output: {

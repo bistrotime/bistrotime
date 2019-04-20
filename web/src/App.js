@@ -7,12 +7,12 @@ import empty from 'is-empty';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
 import Drinkers from './components/drinkers';
 import Pin from './components/pin';
 import Bar from './components/bar';
+import BistrotimeLogo from './images/logo.svg';
 
 const styles = theme => ({
   layout: {
@@ -30,6 +30,13 @@ const styles = theme => ({
   },
   toolbarTitle: {
     flex: 1,
+  },
+  logo: {
+    width: 100,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: theme.spacing.unit * 2,
+    marginBottom: theme.spacing.unit * 2,
   },
   grid: {
     marginTop: theme.spacing.unit * 3,
@@ -86,16 +93,11 @@ class App extends React.Component {
         <CssBaseline />
         <div className={classes.layout}>
           <Toolbar className={classes.toolbar}>
-            <Typography
-              component="h2"
-              variant="h5"
-              color="inherit"
-              align="center"
-              className={classes.toolbarTitle}
-              noWrap
-            >
-              Bistro time
-            </Typography>
+            <img
+              className={classes.logo}
+              src={BistrotimeLogo}
+              alt="Bistrotime"
+            />
           </Toolbar>
           <main>
             <Grid container spacing={40} className={classes.grid}>
