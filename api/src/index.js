@@ -7,12 +7,15 @@ import config from 'config';
 import cors from 'cors';
 
 import logger from './logger';
+import security from './security';
 import api from './api';
 
 dotenv.config();
 
 const app = express();
 app.server = http.createServer(app);
+
+security(app);
 
 app.use(morgan('combined', { stream: logger.stream }));
 
