@@ -7,7 +7,7 @@
     "build": "babel src -s -D -d dist",
     "start": "NODE_ENV=production node dist",
     "lint": "eslint src",
-    "test": "mocha tests --exit --require @babel/register"
+    "test": "NODE_ENV=test mocha tests/** --exit --require @babel/register"
   },
   "dependencies": {
     "@turf/turf": "~5.1.6",
@@ -16,6 +16,7 @@
     "cors": "~2.8.5",
     "dotenv": "~7.0.0",
     "express": "~4.16.4",
+    "express-validator": "~5.3.1",
     "helmet": "~3.16.0",
     "morgan": "~1.9.1",
     "request": "~2.88.0",

@@ -12,7 +12,9 @@ const logger = winston.createLogger({
 
 logger.stream = {
   write: (message) => {
-    logger.info(message.substring(0, message.lastIndexOf('\n')));
+    if (process.env.NODE_ENV !== 'test') {
+      logger.info(message.substring(0, message.lastIndexOf('\n')));
+    }
   },
 };
 
