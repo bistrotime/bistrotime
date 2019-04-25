@@ -1,7 +1,7 @@
 import * as turf from '@turf/turf';
 import computeTraveltime from './lib/citymapper';
 import barFinder from './lib/yelp';
-import inline from './utils/coordinates';
+import { inline } from './utils/coordinates';
 
 export default async function findBistro(points) {
   const geoCenter = turf.center(turf.featureCollection(points));
