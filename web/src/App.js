@@ -3,78 +3,71 @@ import PropTypes from 'prop-types';
 import ReactMapGL, { Marker } from 'react-map-gl';
 import queryString from 'query-string';
 import empty from 'is-empty';
+import shortid from 'shortid';
 
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
+import Fab from '@material-ui/core/Fab';
+import Paper from '@material-ui/core/Paper';
+import AddIcon from '@material-ui/icons/Add';
+import LocalBarIcon from '@material-ui/icons/LocalBar';
+import Button from '@material-ui/core/Button';
 
-import Drinkers from './components/drinkers';
+import Place from './components/place';
 import Pin from './components/pin';
 import Bar from './components/bar';
 import BistrotimeLogo from './images/logo.svg';
 
-const styles = theme => ({
-  layout: {
-    width: 'auto',
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
-      width: 1100,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-  },
-  toolbar: {
-    borderBottom: `1px solid ${theme.palette.grey[300]}`,
-  },
-  toolbarTitle: {
-    flex: 1,
-  },
-  logo: {
-    width: 100,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginTop: theme.spacing.unit * 2,
-    marginBottom: theme.spacing.unit * 2,
-  },
-  grid: {
-    marginTop: theme.spacing.unit * 3,
-  },
-  drinkers: {
-    padding: theme.spacing.unit * 2,
-    backgroundColor: theme.palette.grey[200],
-  },
-});
+import Style from './App.css';
 
 class App extends React.Component {
-  state = {
-    viewport: {
-      width: '100%',
-      height: '60vh',
-      latitude: 48.863066,
-      longitude: 2.328776,
-      zoom: 12,
-    },
-    bar: {},
-    coords: [],
-  };
-
   constructor(props) {
     super(props);
 
-    this.handleDrinkersSubmit = this.handleDrinkersSubmit.bind(this);
-    this.handleDrinkersChange = this.handleDrinkersChange.bind(this);
+    this.state = {
+      viewport: {
+        width: '100%',
+        height: '60vh',
+        latitude: 48.863066,
+        longitude: 2.328776,
+        zoom: 12,
+      },
+      bar: {},
+      places: [],
+    };
+
+    this.addPlace = this.addPlace.bind(this);
+    this.onPlaceHasAddress = this.onPlaceHasAddress.bind(this);
+    this.findBar = this.findBar.bind(this);
   }
 
-  handleDrinkersChange(coords) {
-    this.setState({ coords });
+  componentDidMount() {
+    const { initialNumberOfPlaces } = this.props;
+    for (let i = 0; i < initialNumberOfPlaces; i += 1) {
+      this.addPlace();
+    }
   }
 
-  handleDrinkersSubmit(coords) {
-    const qs = queryString.stringify({
-      coords,
-    });
+  onPlaceHasAddress(uid, event) {
+    const { places } = this.state;
+
+    const placeIndex = places.findIndex(x => x.uid === uid);
+    places[placeIndex].coords = event.suggestion.latlng;
+
+    this.setState({ places });
+  }
+
+  findBar(event) {
+    event.preventDefault();
+
+    const { places } = this.state;
+    const coords = places
+      .filter(place => place.coords)
+      .map(place => `${place.coords.lat},${place.coords.lng}`);
+
+    const qs = queryString.stringify({ coords });
 
     fetch(`${process.env.BISTROTIME_API_URL}/finder?${qs}`)
       .then(response => response.json())
@@ -85,9 +78,21 @@ class App extends React.Component {
       });
   }
 
+  addPlace() {
+    this.setState(prevState => ({
+      places: [
+        ...prevState.places,
+        {
+          uid: shortid.generate(),
+          coords: null,
+        },
+      ],
+    }));
+  }
+
   render() {
     const { classes } = this.props;
-    const { viewport, bar, coords } = this.state;
+    const { viewport, bar, places } = this.state;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -117,11 +122,11 @@ class App extends React.Component {
                     </Marker>
                     )
                   }
-                  {coords.map(coord => (
+                  {places.map(place => place.coords && (
                     <Marker
-                      key={coord.id}
-                      longitude={parseFloat(coord.split(',')[1])}
-                      latitude={parseFloat(coord.split(',')[0])}
+                      key={place.uid}
+                      longitude={place.coords.lng}
+                      latitude={place.coords.lat}
                     >
                       <Pin />
                     </Marker>
@@ -133,10 +138,37 @@ class App extends React.Component {
                   && <Bar info={bar} />
                 }
 
-                <Drinkers
-                  onSubmit={this.handleDrinkersSubmit}
-                  onChange={this.handleDrinkersChange}
-                />
+                <Paper elevation={0} className={classes.places}>
+                  <form onSubmit={this.findBar}>
+                    <Fab
+                      size="small"
+                      color="secondary"
+                      aria-label="Add"
+                      onClick={this.addPlace}
+                      className={classes.addPlaceFab}
+                    >
+                      <AddIcon />
+                    </Fab>
+
+                    {places.map(place => (
+                      <Place
+                        key={place.uid}
+                        onChange={event => this.onPlaceHasAddress(place.uid, event)}
+                      />
+                    ))}
+
+                    <Button
+                      className={classes.findButton}
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      fullWidth
+                    >
+                      Find me the best bar
+                      <LocalBarIcon className={classes.barIconButton} />
+                    </Button>
+                  </form>
+                </Paper>
               </Grid>
             </Grid>
           </main>
@@ -148,6 +180,11 @@ class App extends React.Component {
 
 App.propTypes = {
   classes: PropTypes.object.isRequired,
+  initialNumberOfPlaces: PropTypes.number,
 };
 
-export default withStyles(styles)(App);
+App.defaultProps = {
+  initialNumberOfPlaces: 2,
+};
+
+export default withStyles(Style)(App);

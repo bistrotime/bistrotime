@@ -24,7 +24,7 @@ const Bar = (props) => {
       </Typography>
 
       {info.location.display_address.map(line => (
-        <Typography key={line.id} component="p">
+        <Typography key={line} component="p">
           {line}
         </Typography>
       ))}

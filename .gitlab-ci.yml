@@ -97,6 +97,8 @@ build:web:
   script:
     - cd web/
     - docker build
+      --build-arg ALGOLIA_PLACES_APP_ID
+      --build-arg ALGOLIA_PLACES_APP_KEY
       --build-arg BISTROTIME_API_URL
       --build-arg MAPBOX_TOKEN
       --tag eu.gcr.io/${GCP_PROJECT_ID}/bistrotime-web:${CI_COMMIT_SHA} .
