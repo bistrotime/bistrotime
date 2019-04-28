@@ -5,6 +5,8 @@ export default (app) => {
     directives: {
       defaultSrc: ["'none'"],
     },
+    upgradeInsecureRequests: true,
+    browserSniff: false,
   }));
 
   app.use(helmet.frameguard({ action: 'deny' }));
