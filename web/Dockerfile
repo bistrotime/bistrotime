@@ -16,4 +16,5 @@ RUN npm run build
 FROM nginx:1.15-alpine
 WORKDIR /usr/src/app
 
-COPY --from=build /usr/src/app/dist /usr/share/nginx/html
+COPY docker/nginx.conf /etc/nginx
+COPY --from=build /usr/src/app/dist /usr/src/app
