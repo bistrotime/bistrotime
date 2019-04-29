@@ -24,6 +24,9 @@ module.exports = {
       },
     ],
   },
+  externals: {
+    'mapbox-gl': 'mapboxgl',
+  },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({

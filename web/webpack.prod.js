@@ -14,6 +14,14 @@ module.exports = merge(common, {
       hashFuncNames: ['sha256', 'sha384'],
     }),
   ],
+  performance: {
+    maxEntrypointSize: 500000,
+    maxAssetSize: 500000,
+  },
+  externals: {
+    react: 'React',
+    'react-dom': 'ReactDOM',
+  },
   output: {
     filename: '[name].[hash].bundle.js',
   },
