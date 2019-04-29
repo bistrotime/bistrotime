@@ -3,5 +3,8 @@
   "yelp": {
     "radius": 100,
     "categories": "bars"
+  },
+  "bistrotime": {
+    "max_coords": 3
   }
 }

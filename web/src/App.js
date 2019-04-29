@@ -73,12 +73,14 @@ class App extends React.Component {
     fetch(`${process.env.BISTROTIME_API_URL}/finder?${qs}`)
       .then(response => response.json())
       .then((data) => {
+        // TODO Check 422 (Unprocessable Entity) error code
         if (empty(data.bar)) {
           enqueueSnackbar('Mmh.. we are not able to find you a bar, sorry!', { variant: 'warning' });
         } else {
           this.setState({ bar: data.bar[0] });
         }
-      }).catch(() => {
+      })
+      .catch(() => {
         enqueueSnackbar('We have some issues right now, please retry later', { variant: 'error' });
       });
   }
@@ -187,10 +189,12 @@ App.propTypes = {
   classes: PropTypes.object.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired,
   initialNumberOfPlaces: PropTypes.number,
+  maxNumberOfPlaces: PropTypes.number,
 };
 
 App.defaultProps = {
   initialNumberOfPlaces: 2,
+  maxNumberOfPlaces: 3,
 };
 
 export default withSnackbar(withStyles(Style)(App));
