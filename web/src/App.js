@@ -4,6 +4,7 @@ import ReactMapGL, { Marker } from 'react-map-gl';
 import queryString from 'query-string';
 import empty from 'is-empty';
 import shortid from 'shortid';
+import { withSnackbar } from 'notistack';
 
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -61,7 +62,7 @@ class App extends React.Component {
 
   findBar(event) {
     event.preventDefault();
-
+    const { enqueueSnackbar } = this.props;
     const { places } = this.state;
     const coords = places
       .filter(place => place.coords)
@@ -72,9 +73,13 @@ class App extends React.Component {
     fetch(`${process.env.BISTROTIME_API_URL}/finder?${qs}`)
       .then(response => response.json())
       .then((data) => {
-        if (!empty(data.bar)) {
+        if (empty(data.bar)) {
+          enqueueSnackbar('Mmh.. we are not able to find you a bar, sorry!', { variant: 'warning' });
+        } else {
           this.setState({ bar: data.bar[0] });
         }
+      }).catch(() => {
+        enqueueSnackbar('We have some issues right now, please retry later', { variant: 'error' });
       });
   }
 
@@ -180,6 +185,7 @@ class App extends React.Component {
 
 App.propTypes = {
   classes: PropTypes.object.isRequired,
+  enqueueSnackbar: PropTypes.func.isRequired,
   initialNumberOfPlaces: PropTypes.number,
 };
 
@@ -187,4 +193,4 @@ App.defaultProps = {
   initialNumberOfPlaces: 2,
 };
 
-export default withStyles(Style)(App);
+export default withSnackbar(withStyles(Style)(App));
