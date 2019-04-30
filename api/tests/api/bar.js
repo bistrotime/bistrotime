@@ -9,7 +9,7 @@ chai.should();
 describe('Bar', () => {
   it('should return an error without the coords parameter', (done) => {
     chai.request(app)
-      .get('/bar/bind')
+      .get('/bar/find')
       .end((err, res) => {
         res.should.have.status(422);
         done();
