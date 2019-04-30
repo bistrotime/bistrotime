@@ -1,4 +1,4 @@
-FROM node:11.14 as build
+FROM node:12.1 as build
 WORKDIR /usr/src/app
 
 ARG ALGOLIA_PLACES_APP_ID

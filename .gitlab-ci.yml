@@ -1,5 +1,5 @@
 variables:
-  NODE_VERSION: "11.14"
+  NODE_VERSION: "12.1"
   HELM_VERSION: "2.13.1"
 
 stages:
