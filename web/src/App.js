@@ -70,7 +70,7 @@ class App extends React.Component {
 
     const qs = queryString.stringify({ coords });
 
-    fetch(`${process.env.BISTROTIME_API_URL}/finder?${qs}`)
+    fetch(`${process.env.BISTROTIME_API_URL}/bar/find?${qs}`)
       .then(response => response.json())
       .then((data) => {
         // TODO Check 422 (Unprocessable Entity) error code

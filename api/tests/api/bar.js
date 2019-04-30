@@ -6,10 +6,10 @@ import app from '../../src/index';
 chai.use(chaiHttp);
 chai.should();
 
-describe('Finder', () => {
+describe('Bar', () => {
   it('should return an error without the coords parameter', (done) => {
     chai.request(app)
-      .get('/finder')
+      .get('/bar/bind')
       .end((err, res) => {
         res.should.have.status(422);
         done();
@@ -18,7 +18,7 @@ describe('Finder', () => {
 
   it('should return an error with only one coordinate', (done) => {
     chai.request(app)
-      .get('/finder?coords=48.850639,2.401598')
+      .get('/bar/find?coords=48.850639,2.401598')
       .end((err, res) => {
         res.should.have.status(422);
         done();

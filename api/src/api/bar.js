@@ -7,7 +7,7 @@ import { getPoints } from '../utils/coordinates';
 
 const finder = Router();
 
-finder.get('/', [check('coords').exists()], (req, res) => {
+finder.get('/find', [check('coords').exists()], (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(422).json({ errors: errors.array({ onlyFirstError: true }) });

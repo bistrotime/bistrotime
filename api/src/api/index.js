@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import finder from './finder';
+import bar from './bar';
 import platform from './platform';
 
 const api = Router();
 
 api.use('/platform', platform);
-api.use('/finder', finder);
+api.use('/bar', bar);
 
 export default api;
