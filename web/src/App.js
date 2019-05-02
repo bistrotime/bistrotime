@@ -35,6 +35,7 @@ class App extends React.Component {
         longitude: 2.328776,
         zoom: 12,
       },
+      ready: false,
       bar: {},
       places: [],
     };
@@ -45,17 +46,24 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const { initialNumberOfPlaces } = this.props;
-    for (let i = 0; i < initialNumberOfPlaces; i += 1) {
+    const { minNumberOfPlaces } = this.props;
+    for (let i = 0; i < minNumberOfPlaces; i += 1) {
       this.addPlace();
     }
   }
 
   onPlaceHasAddress(uid, event) {
     const { places } = this.state;
+    const { minNumberOfPlaces } = this.props;
 
     const placeIndex = places.findIndex(x => x.uid === uid);
     places[placeIndex].coords = event.suggestion.latlng;
+
+    // Enable the button if we have enough coordinates
+    const placeWithCoords = places.filter(place => place.coords);
+    if (placeWithCoords.length >= minNumberOfPlaces) {
+      this.setState({ ready: true });
+    }
 
     this.setState({ places });
   }
@@ -99,7 +107,12 @@ class App extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { viewport, bar, places } = this.state;
+    const {
+      viewport,
+      bar,
+      places,
+      ready,
+    } = this.state;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -169,6 +182,7 @@ class App extends React.Component {
                       type="submit"
                       variant="contained"
                       color="primary"
+                      disabled={!ready}
                       fullWidth
                     >
                       Find me the best bar
@@ -188,13 +202,11 @@ class App extends React.Component {
 App.propTypes = {
   classes: PropTypes.object.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired,
-  initialNumberOfPlaces: PropTypes.number,
-  maxNumberOfPlaces: PropTypes.number,
+  minNumberOfPlaces: PropTypes.number,
 };
 
 App.defaultProps = {
-  initialNumberOfPlaces: 2,
-  maxNumberOfPlaces: 3,
+  minNumberOfPlaces: 2,
 };
 
 export default withSnackbar(withStyles(Style)(App));
