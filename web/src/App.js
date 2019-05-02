@@ -31,8 +31,8 @@ class App extends React.Component {
       viewport: {
         width: '100%',
         height: '60vh',
-        latitude: 48.863066,
-        longitude: 2.328776,
+        latitude: props.viewportCoordinates[0],
+        longitude: props.viewportCoordinates[1],
         zoom: 12,
       },
       ready: false,
@@ -203,10 +203,12 @@ App.propTypes = {
   classes: PropTypes.object.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired,
   minNumberOfPlaces: PropTypes.number,
+  viewportCoordinates: PropTypes.array,
 };
 
 App.defaultProps = {
   minNumberOfPlaces: 2,
+  viewportCoordinates: [48.852966, 2.349902],
 };
 
 export default withSnackbar(withStyles(Style)(App));
