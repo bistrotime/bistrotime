@@ -11,7 +11,7 @@ describe('Bar', () => {
     chai.request(app)
       .get('/bar/find')
       .end((err, res) => {
-        res.should.have.status(422);
+        res.should.have.status(400);
         done();
       });
   });
@@ -20,7 +20,7 @@ describe('Bar', () => {
     chai.request(app)
       .get('/bar/find?coords=48.850639,2.401598')
       .end((err, res) => {
-        res.should.have.status(422);
+        res.should.have.status(400);
         done();
       });
   });

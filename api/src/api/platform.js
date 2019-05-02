@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
-const platform = Router();
+const api = Router();
 
-platform.get('/ping', (req, res) => {
+api.get('/ping', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-export default platform;
+export default api;

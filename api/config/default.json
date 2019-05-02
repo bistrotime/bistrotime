@@ -5,6 +5,9 @@
     "categories": "bars"
   },
   "bistrotime": {
-    "max_coords": 3
+    "coords": {
+      "min": 2,
+      "max": 5
+    }
   }
 }

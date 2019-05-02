@@ -3,7 +3,7 @@ import computeTraveltime from './lib/citymapper';
 import barFinder from './lib/yelp';
 import { inline } from './utils/coordinates';
 
-export default async function findBistro(points) {
+export default async function discoverBar(points) {
   const geoCenter = turf.center(turf.featureCollection(points));
   const geoDistance = turf.distance(points[0], geoCenter);
 
