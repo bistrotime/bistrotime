@@ -20,6 +20,7 @@ import Place from './components/place';
 import Pin from './components/pin';
 import Bar from './components/bar';
 import BistrotimeLogo from './images/logo.svg';
+import geolocated from './geolocated';
 
 import Style from './App.css';
 
@@ -50,6 +51,18 @@ class App extends React.Component {
     for (let i = 0; i < minNumberOfPlaces; i += 1) {
       this.addPlace();
     }
+
+    geolocated((position) => {
+      // Update the viewport with the user location
+      const { latitude, longitude } = position.coords;
+      this.setState(state => ({
+        viewport: {
+          ...state.viewport,
+          latitude,
+          longitude,
+        },
+      }));
+    });
   }
 
   onPlaceHasAddress(uid, event) {
@@ -97,9 +110,9 @@ class App extends React.Component {
   }
 
   addPlace() {
-    this.setState(prevState => ({
+    this.setState(state => ({
       places: [
-        ...prevState.places,
+        ...state.places,
         {
           uid: shortid.generate(),
           coords: null,
