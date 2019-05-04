@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactMapGL, { Marker } from 'react-map-gl';
 import queryString from 'query-string';
 import empty from 'is-empty';
 import shortid from 'shortid';
@@ -16,11 +15,10 @@ import AddIcon from '@material-ui/icons/Add';
 import LocalBarIcon from '@material-ui/icons/LocalBar';
 import Button from '@material-ui/core/Button';
 
-import Place from './components/place';
-import Pin from './components/pin';
-import Bar from './components/bar';
 import BistrotimeLogo from './images/logo.svg';
-import geolocated from './geolocated';
+import Place from './components/place';
+import Bar from './components/bar';
+import Map from './components/map';
 
 import Style from './App.css';
 
@@ -29,13 +27,6 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      viewport: {
-        width: '100%',
-        height: '60vh',
-        latitude: props.viewportCoordinates[0],
-        longitude: props.viewportCoordinates[1],
-        zoom: 12,
-      },
       ready: false,
       bar: {},
       places: [],
@@ -51,18 +42,6 @@ class App extends React.Component {
     for (let i = 0; i < minNumberOfPlaces; i += 1) {
       this.addPlace();
     }
-
-    geolocated((position) => {
-      // Update the viewport with the user location
-      const { latitude, longitude } = position.coords;
-      this.setState(state => ({
-        viewport: {
-          ...state.viewport,
-          latitude,
-          longitude,
-        },
-      }));
-    });
   }
 
   onPlaceHasAddress(uid, event) {
@@ -123,12 +102,7 @@ class App extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const {
-      viewport,
-      bar,
-      places,
-      ready,
-    } = this.state;
+    const { bar, places, ready } = this.state;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -143,37 +117,15 @@ class App extends React.Component {
           <main>
             <Grid container spacing={40} className={classes.grid}>
               <Grid item xs={12} md={8}>
-                <ReactMapGL
-                  mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
-                  {...viewport}
-                  onViewportChange={vp => this.setState({ viewport: vp })}
-                >
-                  {!empty(bar)
-                    && (
-                    <Marker
-                      longitude={bar.coordinates.longitude}
-                      latitude={bar.coordinates.latitude}
-                    >
-                      <Pin fill="#c00" />
-                    </Marker>
-                    )
-                  }
-                  {places.map(place => place.coords && (
-                    <Marker
-                      key={place.uid}
-                      longitude={place.coords.lng}
-                      latitude={place.coords.lat}
-                    >
-                      <Pin />
-                    </Marker>
-                  ))}
-                </ReactMapGL>
+                <Map
+                  bar={bar}
+                  places={places}
+                />
               </Grid>
               <Grid item xs={12} md={4}>
                 {!empty(bar)
                   && <Bar info={bar} />
                 }
-
                 <Paper elevation={0} className={classes.places}>
                   <form onSubmit={this.discoverBar}>
                     <Fab
@@ -192,7 +144,6 @@ class App extends React.Component {
                         onChange={event => this.onPlaceHasAddress(place.uid, event)}
                       />
                     ))}
-
                     <Button
                       className={classes.findButton}
                       type="submit"
@@ -219,12 +170,10 @@ App.propTypes = {
   classes: PropTypes.object.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired,
   minNumberOfPlaces: PropTypes.number,
-  viewportCoordinates: PropTypes.array,
 };
 
 App.defaultProps = {
   minNumberOfPlaces: 2,
-  viewportCoordinates: [48.852966, 2.349902],
 };
 
 export default withSnackbar(withStyles(Style)(App));
