@@ -14,6 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import AddIcon from '@material-ui/icons/Add';
 import LocalBarIcon from '@material-ui/icons/LocalBar';
 import Button from '@material-ui/core/Button';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import BistrotimeLogo from './images/logo.svg';
 import Place from './components/place';
@@ -28,12 +29,13 @@ class App extends React.Component {
 
     this.state = {
       ready: false,
+      searching: false,
       bar: {},
       places: [],
     };
 
     this.addPlace = this.addPlace.bind(this);
-    this.discoverBar = this.discoverBar.bind(this);
+    this.searchBar = this.searchBar.bind(this);
     this.onPlaceChange = this.onPlaceChange.bind(this);
     this.onPlaceClear = this.onPlaceClear.bind(this);
   }
@@ -81,8 +83,11 @@ class App extends React.Component {
     this.setState({ places });
   }
 
-  discoverBar(event) {
+  searchBar(event) {
     event.preventDefault();
+
+    // Enable the LinearProgress
+    this.setState({ searching: true });
 
     const { enqueueSnackbar } = this.props;
     const { places } = this.state;
@@ -106,6 +111,10 @@ class App extends React.Component {
       })
       .catch(() => {
         enqueueSnackbar('We have some issues right now, please retry later', { variant: 'error' });
+      })
+      .finally(() => {
+        // Remove the LinearProgress
+        this.setState({ searching: false });
       });
   }
 
@@ -123,7 +132,12 @@ class App extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { bar, places, ready } = this.state;
+    const {
+      bar,
+      places,
+      ready,
+      searching,
+    } = this.state;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -148,7 +162,7 @@ class App extends React.Component {
                   && <Bar info={bar} />
                 }
                 <Paper elevation={0} className={classes.places}>
-                  <form onSubmit={this.discoverBar}>
+                  <form onSubmit={this.searchBar}>
                     <Fab
                       size="small"
                       color="secondary"
@@ -171,7 +185,7 @@ class App extends React.Component {
                       type="submit"
                       variant="contained"
                       color="primary"
-                      disabled={!ready}
+                      disabled={!ready || searching}
                       fullWidth
                     >
                       Find me the best bar
@@ -179,6 +193,7 @@ class App extends React.Component {
                     </Button>
                   </form>
                 </Paper>
+                {searching && (<LinearProgress />)}
               </Grid>
             </Grid>
           </main>

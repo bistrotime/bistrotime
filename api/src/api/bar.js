@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import config from 'config';
 import { error } from '../utils/http';
-import discoverBar from '../bistrotime';
+import searchBar from '../bistrotime';
 import { getPoints } from '../utils/coordinates';
 
 const api = Router();
@@ -21,7 +21,7 @@ api.get('/find', (req, res) => {
     return;
   }
 
-  discoverBar(points).then((bar) => {
+  searchBar(points).then((bar) => {
     res.json({ bar });
   });
 });
