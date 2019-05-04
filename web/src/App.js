@@ -34,7 +34,8 @@ class App extends React.Component {
 
     this.addPlace = this.addPlace.bind(this);
     this.discoverBar = this.discoverBar.bind(this);
-    this.onPlaceHasAddress = this.onPlaceHasAddress.bind(this);
+    this.onPlaceChange = this.onPlaceChange.bind(this);
+    this.onPlaceClear = this.onPlaceClear.bind(this);
   }
 
   componentDidMount() {
@@ -44,17 +45,37 @@ class App extends React.Component {
     }
   }
 
-  onPlaceHasAddress(uid, event) {
-    const { places } = this.state;
+  onPlaceChange(uid, event) {
+    const { places, ready } = this.state;
     const { minNumberOfPlaces } = this.props;
 
     const placeIndex = places.findIndex(x => x.uid === uid);
     places[placeIndex].coords = event.suggestion.latlng;
 
     // Enable the button if we have enough coordinates
-    const placeWithCoords = places.filter(place => place.coords);
-    if (placeWithCoords.length >= minNumberOfPlaces) {
-      this.setState({ ready: true });
+    if (!ready) {
+      const placeWithCoords = places.filter(place => place.coords);
+      if (placeWithCoords.length >= minNumberOfPlaces) {
+        this.setState({ ready: true });
+      }
+    }
+
+    this.setState({ places });
+  }
+
+  onPlaceClear(uid) {
+    const { places, ready } = this.state;
+    const { minNumberOfPlaces } = this.props;
+
+    const placeIndex = places.findIndex(x => x.uid === uid);
+    places[placeIndex].coords = null;
+
+    // Disable the button if we have not enough coordinates
+    if (ready) {
+      const placeWithCoords = places.filter(place => place.coords);
+      if (placeWithCoords.length < minNumberOfPlaces) {
+        this.setState({ ready: false });
+      }
     }
 
     this.setState({ places });
@@ -141,7 +162,8 @@ class App extends React.Component {
                     {places.map(place => (
                       <Place
                         key={place.uid}
-                        onChange={event => this.onPlaceHasAddress(place.uid, event)}
+                        onChange={event => this.onPlaceChange(place.uid, event)}
+                        onClear={() => this.onPlaceClear(place.uid)}
                       />
                     ))}
                     <Button

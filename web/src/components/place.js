@@ -26,10 +26,9 @@ class Place extends React.Component {
       type: 'address',
     });
 
-    const { onChange } = this.props;
-    if (onChange) {
-      this.places.on('change', onChange);
-    }
+    const { onChange, onClear } = this.props;
+    this.places.on('change', onChange);
+    this.places.on('clear', onClear);
   }
 
   render() {
@@ -48,12 +47,12 @@ class Place extends React.Component {
 
 Place.defaultProps = {
   placeholder: 'Type an address',
-  onChange: null,
 };
 
 Place.propTypes = {
   placeholder: PropTypes.string,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
+  onClear: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Place);
