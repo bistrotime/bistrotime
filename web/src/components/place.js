@@ -22,6 +22,10 @@ class Place extends React.Component {
       container: this.autocompleteElem,
     });
 
+    this.places.configure({
+      type: 'address',
+    });
+
     const { onChange } = this.props;
     if (onChange) {
       this.places.on('change', onChange);
