@@ -41,8 +41,8 @@ class App extends React.Component {
     };
 
     this.addPlace = this.addPlace.bind(this);
+    this.discoverBar = this.discoverBar.bind(this);
     this.onPlaceHasAddress = this.onPlaceHasAddress.bind(this);
-    this.findBar = this.findBar.bind(this);
   }
 
   componentDidMount() {
@@ -68,10 +68,12 @@ class App extends React.Component {
     this.setState({ places });
   }
 
-  findBar(event) {
+  discoverBar(event) {
     event.preventDefault();
+
     const { enqueueSnackbar } = this.props;
     const { places } = this.state;
+
     const coords = places
       .filter(place => place.coords)
       .map(place => `${place.coords.lat},${place.coords.lng}`);
@@ -81,11 +83,12 @@ class App extends React.Component {
     fetch(`${process.env.BISTROTIME_API_URL}/bar/find?${qs}`)
       .then(response => response.json())
       .then((data) => {
-        // TODO Check 422 (Unprocessable Entity) error code
-        if (empty(data.bar)) {
-          enqueueSnackbar('Mmh.. we are not able to find you a bar, sorry!', { variant: 'warning' });
-        } else {
+        if ('bar' in data && !empty(data.bar)) {
           this.setState({ bar: data.bar[0] });
+        } else if ('error' in data) {
+          enqueueSnackbar(data.error.message, { variant: 'error' });
+        } else {
+          enqueueSnackbar('We are not able to find you a bar', { variant: 'warning' });
         }
       })
       .catch(() => {
@@ -159,7 +162,7 @@ class App extends React.Component {
                 }
 
                 <Paper elevation={0} className={classes.places}>
-                  <form onSubmit={this.findBar}>
+                  <form onSubmit={this.discoverBar}>
                     <Fab
                       size="small"
                       color="secondary"
