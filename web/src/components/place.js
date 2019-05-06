@@ -14,7 +14,7 @@ const styles = theme => ({
   },
 });
 
-class Place extends React.Component {
+class Place extends React.PureComponent {
   componentDidMount() {
     this.places = AlgoliaPlaces({
       appId: process.env.ALGOLIA_PLACES_APP_ID,

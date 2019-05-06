@@ -20,6 +20,7 @@ import BistrotimeLogo from './images/logo.svg';
 import Place from './components/place';
 import Bar from './components/bar';
 import Map from './components/map';
+import { withCoordinates } from './utils';
 
 import Style from './App.css';
 
@@ -48,39 +49,55 @@ class App extends React.Component {
   }
 
   onPlaceChange(uid, event) {
-    const { places, ready } = this.state;
-    const { minNumberOfPlaces } = this.props;
+    const places = this.updatePlaceCoordinates(uid, event.suggestion.latlng);
 
-    const placeIndex = places.findIndex(x => x.uid === uid);
-    places[placeIndex].coords = event.suggestion.latlng;
-
-    // Enable the button if we have enough coordinates
-    if (!ready) {
-      const placeWithCoords = places.filter(place => place.coords);
-      if (placeWithCoords.length >= minNumberOfPlaces) {
-        this.setState({ ready: true });
-      }
-    }
-
+    this.setReadyState(places);
     this.setState({ places });
   }
 
   onPlaceClear(uid) {
-    const { places, ready } = this.state;
-    const { minNumberOfPlaces } = this.props;
+    const places = this.updatePlaceCoordinates(uid, null);
 
-    const placeIndex = places.findIndex(x => x.uid === uid);
-    places[placeIndex].coords = null;
-
-    // Disable the button if we have not enough coordinates
-    if (ready) {
-      const placeWithCoords = places.filter(place => place.coords);
-      if (placeWithCoords.length < minNumberOfPlaces) {
-        this.setState({ ready: false });
-      }
-    }
-
+    this.setReadyState(places);
     this.setState({ places });
+  }
+
+  setReadyState(places) {
+    const { minNumberOfPlaces } = this.props;
+    const placeWithCoords = withCoordinates(places);
+
+    // Enable the button if we have enough coordinates
+    if (placeWithCoords.length >= minNumberOfPlaces) {
+      this.setState({ ready: true });
+    } else {
+      this.setState({ ready: false });
+    }
+  }
+
+  addPlace() {
+    this.setState(state => ({
+      places: [
+        ...state.places,
+        {
+          uid: shortid.generate(),
+          coords: null,
+        },
+      ],
+    }));
+  }
+
+  updatePlaceCoordinates(uid, coords) {
+    const { places } = this.state;
+    return places.map((place) => {
+      if (place.uid === uid) {
+        return {
+          ...place,
+          coords,
+        };
+      }
+
+      return place;
+    });
   }
 
   searchBar(event) {
@@ -116,18 +133,6 @@ class App extends React.Component {
         // Remove the LinearProgress
         this.setState({ searching: false });
       });
-  }
-
-  addPlace() {
-    this.setState(state => ({
-      places: [
-        ...state.places,
-        {
-          uid: shortid.generate(),
-          coords: null,
-        },
-      ],
-    }));
   }
 
   render() {

@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
-  barPaper: {
+  bar: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
@@ -18,7 +18,7 @@ const styles = theme => ({
 const Bar = (props) => {
   const { classes, info } = props;
   return (
-    <Paper className={classes.barPaper} elevation={0}>
+    <Paper className={classes.bar} elevation={0}>
       <Typography variant="h6" gutterBottom>
         {info.name}
       </Typography>
