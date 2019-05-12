@@ -1,7 +1,14 @@
+@import "../vars.scss";
+
 .MapContainer {
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
   width: 100%;
-  z-index: -10;
+  height: 400px;
+
+  @media screen and (min-width: $break-large) {
+    height: initial;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    z-index: -10;
+  }
 }

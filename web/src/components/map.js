@@ -6,6 +6,7 @@ import isequal from 'lodash.isequal';
 import empty from 'is-empty';
 import bbox from '@turf/bbox';
 import { point, featureCollection } from '@turf/helpers';
+import { withSize } from 'react-sizeme';
 
 import Pin from './pin';
 import geolocated from '../geolocated';
@@ -60,7 +61,7 @@ class Map extends React.Component {
         [minLng, minLat],
         [maxLng, maxLat],
       ],
-      { padding: 30 },
+      { padding: 150 },
     );
 
     return {
@@ -87,8 +88,6 @@ class Map extends React.Component {
       defaultViewport,
       viewport: {
         ...defaultViewport,
-        width: '100%',
-        height: '100%',
         transitionDuration: 500,
       },
       places: withCoordinates(props.places),
@@ -122,7 +121,7 @@ class Map extends React.Component {
   }
 
   render() {
-    const { bar } = this.props;
+    const { bar, size } = this.props;
     const { viewport, places } = this.state;
 
     return (
@@ -130,6 +129,9 @@ class Map extends React.Component {
         <ReactMapGL
           mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
           {...viewport}
+          width={size.width}
+          height={size.height}
+          mapStyle="mapbox://styles/mapbox/streets-v9"
           onViewportChange={vp => this.setState({ viewport: vp })}
         >
           {!empty(bar) && (
@@ -160,6 +162,7 @@ Map.propTypes = {
   places: PropTypes.array.isRequired,
   viewportCoordinates: PropTypes.array,
   viewportZoom: PropTypes.number,
+  size: PropTypes.object.isRequired,
 };
 
 Map.defaultProps = {
@@ -167,4 +170,4 @@ Map.defaultProps = {
   viewportZoom: 12,
 };
 
-export default Map;
+export default withSize({ monitorHeight: true })(Map);

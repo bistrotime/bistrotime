@@ -139,7 +139,7 @@ class App extends React.Component {
       searching,
     } = this.state;
     return (
-      <main>
+      <main className="Container">
         <div className="Logo">
           <img
             src={BistrotimeLogo}

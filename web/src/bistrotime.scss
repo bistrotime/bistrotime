@@ -1,21 +1,29 @@
-$break-small: 600px;
+@import "vars.scss";
 
 .Logo {
+  margin: 20px auto;
   width: 100px;
-  top: 20px;
-  left: 20px;
-  position: absolute;
 
-  @media screen and (max-width: $break-small) {
-    background-color: red;
+  @media screen and (min-width: $break-large) {
+    margin: auto;
+    position: absolute;
+    top: 20px;
+    left: 20px;
   }
 }
 
 .Sidebar {
-  position: absolute;
-  top: 150px;
-  right: 20px;
-  width: 400px;
+  margin-top: 20px;
+  padding: 0 20px;
+
+  @media screen and (min-width: $break-large) {
+    position: absolute;
+    top: 150px;
+    right: 20px;
+    width: 400px;
+    padding: initial;
+    margin: initial;
+  }
 }
 
 .Places {
