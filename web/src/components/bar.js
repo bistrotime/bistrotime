@@ -3,22 +3,13 @@ import PropTypes from 'prop-types';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
 
-const styles = theme => ({
-  bar: {
-    ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
-    marginBottom: theme.spacing.unit * 2,
-    backgroundColor: theme.palette.grey[100],
-  },
-});
+import './bar.scss';
 
 const Bar = (props) => {
-  const { classes, info } = props;
+  const { info } = props;
   return (
-    <Paper className={classes.bar} elevation={0}>
+    <Paper className="Bar" elevation={0}>
       <Typography variant="h6" gutterBottom>
         {info.name}
       </Typography>
@@ -33,8 +24,7 @@ const Bar = (props) => {
 };
 
 Bar.propTypes = {
-  classes: PropTypes.object.isRequired,
   info: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Bar);
+export default Bar;

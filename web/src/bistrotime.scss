@@ -1,0 +1,41 @@
+$break-small: 600px;
+
+.Logo {
+  width: 100px;
+  top: 20px;
+  left: 20px;
+  position: absolute;
+
+  @media screen and (max-width: $break-small) {
+    background-color: red;
+  }
+}
+
+.Sidebar {
+  position: absolute;
+  top: 150px;
+  right: 20px;
+  width: 400px;
+}
+
+.Places {
+  padding: 16px;
+  background-color: #eeeeee;
+}
+
+.AddPlace {
+  margin-bottom: 8px;
+  float: right;
+}
+
+.FindButton {
+  margin-top: 16px;
+}
+
+.BarIconButton {
+  margin-left: 8px;
+}
+
+.Search {
+  margin-top: 8px;
+}

@@ -11,7 +11,9 @@ import Pin from './pin';
 import geolocated from '../geolocated';
 import { withCoordinates } from '../utils';
 
-export default class Map extends React.Component {
+import './map.scss';
+
+class Map extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const places = withCoordinates(props.places);
 
@@ -86,7 +88,7 @@ export default class Map extends React.Component {
       viewport: {
         ...defaultViewport,
         width: '100%',
-        height: 400,
+        height: '100%',
         transitionDuration: 500,
       },
       places: withCoordinates(props.places),
@@ -124,29 +126,31 @@ export default class Map extends React.Component {
     const { viewport, places } = this.state;
 
     return (
-      <ReactMapGL
-        mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
-        {...viewport}
-        onViewportChange={vp => this.setState({ viewport: vp })}
-      >
-        {!empty(bar) && (
-          <Marker
-            longitude={bar.coordinates.longitude}
-            latitude={bar.coordinates.latitude}
-          >
-            <Pin fill="#c00" />
-          </Marker>
-        )}
-        {places.map(place => (
-          <Marker
-            key={place.uid}
-            longitude={place.coords.lng}
-            latitude={place.coords.lat}
-          >
-            <Pin />
-          </Marker>
-        ))}
-      </ReactMapGL>
+      <div className="MapContainer">
+        <ReactMapGL
+          mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
+          {...viewport}
+          onViewportChange={vp => this.setState({ viewport: vp })}
+        >
+          {!empty(bar) && (
+            <Marker
+              longitude={bar.coordinates.longitude}
+              latitude={bar.coordinates.latitude}
+            >
+              <Pin fill="#c00" />
+            </Marker>
+          )}
+          {places.map(place => (
+            <Marker
+              key={place.uid}
+              longitude={place.coords.lng}
+              latitude={place.coords.lat}
+            >
+              <Pin />
+            </Marker>
+          ))}
+        </ReactMapGL>
+      </div>
     );
   }
 }
@@ -162,3 +166,5 @@ Map.defaultProps = {
   viewportCoordinates: [48.852966, 2.349902],
   viewportZoom: 12,
 };
+
+export default Map;
