@@ -2,17 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AlgoliaPlaces from 'places.js';
 
-import { withStyles } from '@material-ui/core/styles';
-
-const styles = theme => ({
-  '@global': {
-    '.algolia-places': {
-      fontFamily: theme.typography.fontFamily,
-      fontSize: theme.typography.fontSize,
-      marginTop: theme.spacing.unit,
-    },
-  },
-});
+import './place.scss';
 
 class Place extends React.PureComponent {
   componentDidMount() {
@@ -55,4 +45,4 @@ Place.propTypes = {
   onClear: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(Place);
+export default Place;

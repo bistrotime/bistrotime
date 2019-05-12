@@ -6,12 +6,15 @@ import isequal from 'lodash.isequal';
 import empty from 'is-empty';
 import bbox from '@turf/bbox';
 import { point, featureCollection } from '@turf/helpers';
+import { withSize } from 'react-sizeme';
 
 import Pin from './pin';
 import geolocated from '../geolocated';
 import { withCoordinates } from '../utils';
 
-export default class Map extends React.Component {
+import './map.scss';
+
+class Map extends React.Component {
   static getDerivedStateFromProps(props, state) {
     const places = withCoordinates(props.places);
 
@@ -58,7 +61,7 @@ export default class Map extends React.Component {
         [minLng, minLat],
         [maxLng, maxLat],
       ],
-      { padding: 30 },
+      { padding: 150 },
     );
 
     return {
@@ -85,8 +88,6 @@ export default class Map extends React.Component {
       defaultViewport,
       viewport: {
         ...defaultViewport,
-        width: '100%',
-        height: 400,
         transitionDuration: 500,
       },
       places: withCoordinates(props.places),
@@ -120,33 +121,38 @@ export default class Map extends React.Component {
   }
 
   render() {
-    const { bar } = this.props;
+    const { bar, size } = this.props;
     const { viewport, places } = this.state;
 
     return (
-      <ReactMapGL
-        mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
-        {...viewport}
-        onViewportChange={vp => this.setState({ viewport: vp })}
-      >
-        {!empty(bar) && (
-          <Marker
-            longitude={bar.coordinates.longitude}
-            latitude={bar.coordinates.latitude}
-          >
-            <Pin fill="#c00" />
-          </Marker>
-        )}
-        {places.map(place => (
-          <Marker
-            key={place.uid}
-            longitude={place.coords.lng}
-            latitude={place.coords.lat}
-          >
-            <Pin />
-          </Marker>
-        ))}
-      </ReactMapGL>
+      <div className="MapContainer">
+        <ReactMapGL
+          mapboxApiAccessToken={process.env.MAPBOX_TOKEN}
+          {...viewport}
+          width={size.width}
+          height={size.height}
+          mapStyle="mapbox://styles/mapbox/streets-v9"
+          onViewportChange={vp => this.setState({ viewport: vp })}
+        >
+          {!empty(bar) && (
+            <Marker
+              longitude={bar.coordinates.longitude}
+              latitude={bar.coordinates.latitude}
+            >
+              <Pin fill="#c00" />
+            </Marker>
+          )}
+          {places.map(place => (
+            <Marker
+              key={place.uid}
+              longitude={place.coords.lng}
+              latitude={place.coords.lat}
+            >
+              <Pin />
+            </Marker>
+          ))}
+        </ReactMapGL>
+      </div>
     );
   }
 }
@@ -156,9 +162,12 @@ Map.propTypes = {
   places: PropTypes.array.isRequired,
   viewportCoordinates: PropTypes.array,
   viewportZoom: PropTypes.number,
+  size: PropTypes.object.isRequired,
 };
 
 Map.defaultProps = {
   viewportCoordinates: [48.852966, 2.349902],
   viewportZoom: 12,
 };
+
+export default withSize({ monitorHeight: true })(Map);

@@ -1,0 +1,49 @@
+@import "vars.scss";
+
+.Logo {
+  margin: 20px auto;
+  width: 100px;
+
+  @media screen and (min-width: $break-large) {
+    margin: auto;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+}
+
+.Sidebar {
+  margin-top: 20px;
+  padding: 0 20px;
+
+  @media screen and (min-width: $break-large) {
+    position: absolute;
+    top: 150px;
+    right: 20px;
+    width: 400px;
+    padding: initial;
+    margin: initial;
+  }
+}
+
+.Places {
+  padding: 16px;
+  background-color: #eeeeee;
+}
+
+.AddPlace {
+  margin-bottom: 8px;
+  float: right;
+}
+
+.FindButton {
+  margin-top: 16px;
+}
+
+.BarIconButton {
+  margin-left: 8px;
+}
+
+.Search {
+  margin-top: 8px;
+}
