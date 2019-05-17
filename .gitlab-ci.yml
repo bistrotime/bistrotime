@@ -1,6 +1,6 @@
 variables:
   NODE_VERSION: "12"
-  HELM_VERSION: "2.13.1"
+  HELM_VERSION: "2.14"
 
 stages:
   - setup
@@ -109,7 +109,7 @@ build:web:
 .deploy:
   stage: deploy
   image:
-    name: alpine/helm:$HELM_VERSION
+    name: gcr.io/kubernetes-helm/tiller:v${HELM_VERSION}
     entrypoint: ["/bin/sh", "-c"]
   dependencies: []
   before_script:
