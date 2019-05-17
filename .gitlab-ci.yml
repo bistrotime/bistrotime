@@ -1,6 +1,6 @@
 variables:
   NODE_VERSION: "12"
-  HELM_VERSION: "2.14"
+  HELM_VERSION: "2.14.0"
 
 stages:
   - setup
