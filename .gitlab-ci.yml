@@ -115,15 +115,15 @@ build:web:
   before_script:
     - mkdir ~/.kube
     - echo "$HELM_KUBECONFIG" | base64 -d > ~/.kube/config
-    - helm init --client-only
-    - helm version
+    - /helm init --client-only
+    - /helm version
   only:
     - master
 
 deploy:api:
   extends: .deploy
   script:
-    - helm upgrade
+    - /helm upgrade
       --install bistrotime-api charts/bistrotime-api
       --namespace bistrotime
       --set image.tag=${CI_COMMIT_SHA}
@@ -134,7 +134,7 @@ deploy:api:
 deploy:web:
   extends: .deploy
   script:
-    - helm upgrade
+    - /helm upgrade
       --install bistrotime-web charts/bistrotime-web
       --namespace bistrotime
       --set image.tag=${CI_COMMIT_SHA}
