@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import config from 'config';
 import { error } from '../utils/http';
-import searchBar from '../bistrotime';
+import compute from '../bistrotime';
 import { getPoints } from '../utils/coordinates';
 
 const api = Router();
@@ -21,8 +21,8 @@ api.get('/find', (req, res) => {
     return;
   }
 
-  searchBar(points).then((bar) => {
-    res.json({ bar });
+  compute(points).then((data) => {
+    res.json({ ...data });
   });
 });
 

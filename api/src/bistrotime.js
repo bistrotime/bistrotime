@@ -3,9 +3,9 @@ import computeTraveltime from './lib/citymapper';
 import barFinder from './lib/yelp';
 import { inline } from './utils/coordinates';
 
-export default async function searchBar(points) {
+export default async function compute(points) {
   const geoCenter = turf.center(turf.featureCollection(points));
-  const geoDistance = turf.distance(points[0], geoCenter);
+  const distance = turf.distance(points[0], geoCenter);
 
   const promises = [];
   points.forEach((point) => {
@@ -22,22 +22,42 @@ export default async function searchBar(points) {
   const factors = traveltimes.map(traveltime => min / traveltime);
 
   const offsets = [];
+  const places = [];
   points.forEach((point, i) => {
-    if (factors[i] !== 1) {
+    const factor = factors[i];
+    let offset = null;
+
+    if (factor !== 1) {
       const lineString = turf.lineString([
         turf.getCoord(geoCenter),
         turf.getCoord(point),
       ]);
 
-      offsets.push(turf.along(lineString, factors[i] * geoDistance));
+      offset = turf.along(lineString, factor * distance);
     } else {
-      offsets.push(turf.clone(point));
+      offset = turf.clone(point);
     }
+
+    offsets.push(offset);
+
+    // Add additional information
+    places.push({
+      point,
+      offset,
+      factor,
+    });
   });
 
   // Calculate the new "center" with offset coords
-  const center = turf.center(turf.featureCollection(offsets));
-  const bar = barFinder(turf.getCoord(center));
+  const offsetCenter = turf.center(turf.featureCollection(offsets));
+  const bar = barFinder(turf.getCoord(offsetCenter));
 
-  return bar;
+  return {
+    center: {
+      geo: geoCenter,
+      offset: offsetCenter,
+    },
+    places,
+    bar,
+  };
 }
