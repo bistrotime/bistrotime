@@ -19,7 +19,7 @@ security(app);
 
 app.use(morgan('combined', {
   stream: logger.stream,
-  skip: req => req.url === '/platform/ping',
+  skip: req => req.originalUrl === '/platform/ping',
 }));
 
 app.use(cors());
