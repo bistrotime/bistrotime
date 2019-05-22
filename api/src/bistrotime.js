@@ -59,7 +59,7 @@ export default async function compute(points) {
   const offsetCenter = turf.center(turf.featureCollection(offsets));
   logger.debug('Offset center computed at %s', inline(offsetCenter));
 
-  const bar = barFinder(turf.getCoord(offsetCenter));
+  const bar = await barFinder(turf.getCoord(offsetCenter));
 
   return {
     center: {
