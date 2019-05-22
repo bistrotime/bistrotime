@@ -1,5 +1,6 @@
 {
   "port": 8080,
+  "ingress_controller_ip": "10.44.0.12",
   "yelp": {
     "radius": 100,
     "categories": "bars"
