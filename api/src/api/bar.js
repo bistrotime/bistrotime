@@ -28,9 +28,14 @@ api.get('/find', (req, res) => {
     points.map(p => inline(p)),
   );
 
-  compute(points).then((data) => {
-    res.json({ ...data });
-  });
+  compute(points)
+    .then((data) => {
+      res.json({ ...data });
+    })
+    .catch((err) => {
+      logger.warn('Unable to compute the bar location (%s)', err.message);
+      error(res, 'Some services did not respond as expected');
+    });
 });
 
 export default api;
