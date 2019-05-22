@@ -1,4 +1,5 @@
 import request from 'request-promise';
+import logger from '../logger';
 
 export default async function computeTraveltime(from, to) {
   const options = {
@@ -12,5 +13,14 @@ export default async function computeTraveltime(from, to) {
   };
 
   const response = await request(options);
-  return response.travel_time_minutes;
+  const travelTimeMinutes = response.travel_time_minutes;
+
+  logger.debug(
+    'Travel time between %s and %s is %d minutes with Citymapper',
+    from,
+    to,
+    travelTimeMinutes,
+  );
+
+  return travelTimeMinutes;
 }

@@ -2,7 +2,8 @@ import { Router } from 'express';
 import config from 'config';
 import { error } from '../utils/http';
 import compute from '../bistrotime';
-import { getPoints } from '../utils/coordinates';
+import { getPoints, inline } from '../utils/coordinates';
+import logger from '../logger';
 
 const api = Router();
 
@@ -20,6 +21,12 @@ api.get('/find', (req, res) => {
     error(res, `You must provide between ${minCoords} and ${maxCoords} coordinates`);
     return;
   }
+
+  logger.info(
+    'Trying to find a bar with %d coordinates (%s)',
+    points.length,
+    points.map(p => inline(p)),
+  );
 
   compute(points).then((data) => {
     res.json({ ...data });

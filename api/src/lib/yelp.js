@@ -1,7 +1,11 @@
 import request from 'request-promise';
 import config from 'config';
 
+import logger from '../logger';
+
 export default async (coord) => {
+  logger.debug('Trying to find a bar arround %s', coord);
+
   const options = {
     uri: 'https://api.yelp.com/v3/businesses/search',
     qs: {

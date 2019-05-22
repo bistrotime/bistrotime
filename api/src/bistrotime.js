@@ -1,11 +1,18 @@
 import * as turf from '@turf/turf';
 import computeTraveltime from './lib/citymapper';
 import barFinder from './lib/yelp';
+import logger from './logger';
 import { inline } from './utils/coordinates';
 
 export default async function compute(points) {
   const geoCenter = turf.center(turf.featureCollection(points));
   const distance = turf.distance(points[0], geoCenter);
+
+  logger.debug(
+    'Geographic center computed at %s with %f kilometers',
+    inline(geoCenter),
+    distance,
+  );
 
   const promises = [];
   points.forEach((point) => {
@@ -50,6 +57,8 @@ export default async function compute(points) {
 
   // Calculate the new "center" with offset coords
   const offsetCenter = turf.center(turf.featureCollection(offsets));
+  logger.debug('Offset center computed at %s', inline(offsetCenter));
+
   const bar = barFinder(turf.getCoord(offsetCenter));
 
   return {

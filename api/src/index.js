@@ -17,7 +17,10 @@ app.server = http.createServer(app);
 
 security(app);
 
-app.use(morgan('combined', { stream: logger.stream }));
+app.use(morgan('combined', {
+  stream: logger.stream,
+  skip: req => req.url === '/platform/ping',
+}));
 
 app.use(cors());
 app.use(express.json());
