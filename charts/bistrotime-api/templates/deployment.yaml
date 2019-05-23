@@ -25,11 +25,11 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           env:
-            - name: CITYMAPPER_TOKEN
+            - name: NAVITIA_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: {{ include "bistrotime-api.fullname" . }}
-                  key: citymapper_token
+                  key: navitia_token
             - name: YELP_TOKEN
               valueFrom:
                 secretKeyRef:

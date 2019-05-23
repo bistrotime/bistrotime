@@ -9,4 +9,4 @@ hosts:
 
 tokens:
   yelp: yelp_token
-  citymapper: citymapper_token
+  navitia: navitia_token

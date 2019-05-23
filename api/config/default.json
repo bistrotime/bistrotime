@@ -4,6 +4,7 @@
   "ingress_controller_ip": "10.44.0.12",
   "yelp": {
     "radius": 100,
+    "limit": 3,
     "categories": "bars"
   },
   "bistrotime": {

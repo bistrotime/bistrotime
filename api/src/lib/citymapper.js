@@ -1,7 +1,11 @@
 import request from 'request-promise';
 import logger from '../logger';
+import { inline } from '../utils/coordinates';
 
-export default async function computeTraveltime(from, to) {
+export default async function (from, to) {
+  from = inline(from);
+  to = inline(to);
+
   const options = {
     uri: 'https://developer.citymapper.com/api/1/traveltime/',
     qs: {

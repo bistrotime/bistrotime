@@ -1,6 +1,6 @@
 import * as turf from '@turf/turf';
-import computeTraveltime from './lib/citymapper';
-import barFinder from './lib/yelp';
+import duration from './lib/navitia';
+import find from './lib/yelp';
 import logger from './logger';
 import { inline } from './utils/coordinates';
 
@@ -16,10 +16,7 @@ export default async function compute(points) {
 
   const promises = [];
   points.forEach((point) => {
-    promises.push(computeTraveltime(
-      inline(point),
-      inline(geoCenter),
-    ));
+    promises.push(duration(point, geoCenter));
   });
 
   const traveltimes = await Promise.all(promises);
@@ -59,7 +56,7 @@ export default async function compute(points) {
   const offsetCenter = turf.center(turf.featureCollection(offsets));
   logger.debug('Offset center computed at %s', inline(offsetCenter));
 
-  const bar = await barFinder(turf.getCoord(offsetCenter));
+  const bar = await find(turf.getCoord(offsetCenter));
 
   return {
     center: {

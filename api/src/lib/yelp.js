@@ -14,7 +14,7 @@ export default async (coord) => {
       radius: config.get('yelp.radius'),
       categories: config.get('yelp.categories'),
       sort_by: 'best_match',
-      limit: 1,
+      limit: config.get('yelp.limit'),
     },
     auth: {
       bearer: process.env.YELP_TOKEN,
@@ -23,5 +23,16 @@ export default async (coord) => {
   };
 
   const response = await request(options);
-  return response.businesses;
+  const { businesses } = response;
+
+  // Try to select a different random bar each time
+  const bar = businesses[Math.floor((Math.random() * businesses.length))];
+
+  logger.info(
+    'Found the random bar "%s" (%s)',
+    bar.name,
+    bar.alias,
+  );
+
+  return bar;
 };

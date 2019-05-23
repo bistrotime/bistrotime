@@ -128,7 +128,7 @@ deploy:api:
       --namespace bistrotime
       --set image.tag=${CI_COMMIT_SHA}
       --set tokens.yelp=${YELP_TOKEN}
-      --set tokens.citymapper=${CITYMAPPER_TOKEN}
+      --set tokens.navitia=${NAVITIA_TOKEN}
       --wait
 
 deploy:web:
