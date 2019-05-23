@@ -115,7 +115,7 @@ class App extends React.Component {
       .then(response => response.json())
       .then((data) => {
         if ('bar' in data && !empty(data.bar)) {
-          this.setState({ bar: data.bar[0] });
+          this.setState({ bar: data.bar });
         } else if ('error' in data) {
           enqueueSnackbar(data.error.message, { variant: 'error' });
         } else {
