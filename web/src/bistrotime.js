@@ -8,9 +8,11 @@ import { withSnackbar } from 'notistack';
 import Fab from '@material-ui/core/Fab';
 import Paper from '@material-ui/core/Paper';
 import AddIcon from '@material-ui/icons/Add';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocalBarIcon from '@material-ui/icons/LocalBar';
 import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Typography from '@material-ui/core/Typography';
 
 import BistrotimeLogo from './images/logo.svg';
 import Place from './components/place';
@@ -188,6 +190,11 @@ class App extends React.Component {
             </form>
           </Paper>
         </div>
+        <Typography className="Footer">
+          Made with
+          <FavoriteIcon className="LoveIcon" />
+          in France
+        </Typography>
       </main>
     );
   }

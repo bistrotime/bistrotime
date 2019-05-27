@@ -4,7 +4,7 @@
   margin: 20px auto;
   width: 100px;
 
-  @media screen and (min-width: $break-large) {
+  @media screen and (min-width: $break) {
     margin: auto;
     position: absolute;
     top: 20px;
@@ -16,7 +16,7 @@
   margin-top: 20px;
   padding: 0 20px;
 
-  @media screen and (min-width: $break-large) {
+  @media screen and (min-width: $break) {
     position: absolute;
     top: 150px;
     right: 20px;
@@ -46,4 +46,25 @@
 
 .Search {
   margin-top: 8px;
+}
+
+.Footer {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  width: 300px;
+  margin-left: -150px;
+  text-align: center;
+  font-weight: 500;
+
+  @media screen and (max-width: $break) {
+    display: none;
+  }
+}
+
+.LoveIcon {
+  color: #e25555;
+  font-size: 13px;
+  margin-left: 3px;
+  margin-right: 3px;
 }
