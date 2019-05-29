@@ -25,6 +25,11 @@ export default async (coord) => {
   const response = await request(options);
   const { businesses } = response;
 
+  if (businesses.length === 0) {
+    logger.warn('Unable to find a bar in the desired location');
+    return {};
+  }
+
   // Try to select a different random bar each time
   const bar = businesses[Math.floor((Math.random() * businesses.length))];
 
