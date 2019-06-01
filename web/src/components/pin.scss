@@ -1,5 +1,11 @@
-.Pin {
-  transform: translate(-10px, 20px);
+.PinContainer {
   cursor: pointer;
+  margin-top: -20px;
+  margin-left: -10px;
+}
+
+.Pin {
   stroke: none;
+  width: 20px;
+  height: 20px;
 }
