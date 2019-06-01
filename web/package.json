@@ -43,7 +43,7 @@
     "query-string": "~6.5.0",
     "react": "~16.8.6",
     "react-dom": "~16.8.6",
-    "react-map-gl": "~4.1.2",
+    "react-map-gl": "~5.0.0",
     "react-sizeme": "~2.6.7",
     "sass-loader": "~7.1.0",
     "serve": "~11.0.1",
