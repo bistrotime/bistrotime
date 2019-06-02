@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactMapGL, { Marker } from 'react-map-gl';
+import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import WebMercatorViewport from 'viewport-mercator-project';
 import isequal from 'lodash.isequal';
 import empty from 'is-empty';
 import bbox from '@turf/bbox';
 import { point, featureCollection } from '@turf/helpers';
 import { withSize } from 'react-sizeme';
+
+import Typography from '@material-ui/core/Typography';
 
 import Pin from './pin';
 import geolocated from '../geolocated';
@@ -134,14 +136,6 @@ class Map extends React.Component {
           mapStyle="mapbox://styles/mapbox/streets-v9"
           onViewportChange={vp => this.setState({ viewport: vp })}
         >
-          {!empty(bar) && (
-            <Marker
-              longitude={bar.coordinates.longitude}
-              latitude={bar.coordinates.latitude}
-            >
-              <Pin fill="#c00" />
-            </Marker>
-          )}
           {places.map(place => (
             <Marker
               key={place.uid}
@@ -151,6 +145,34 @@ class Map extends React.Component {
               <Pin />
             </Marker>
           ))}
+          {!empty(bar) && (
+            <React.Fragment>
+              <Marker
+                longitude={bar.coordinates.longitude}
+                latitude={bar.coordinates.latitude}
+              >
+                <Pin fill="#c00" />
+              </Marker>
+              <Popup
+                anchor="top"
+                longitude={bar.coordinates.longitude}
+                latitude={bar.coordinates.latitude}
+                closeButton={false}
+              >
+                <div className="Bar">
+                  <Typography variant="h6" gutterBottom>
+                    {bar.name}
+                  </Typography>
+
+                  {bar.location.display_address.map(line => (
+                    <Typography key={line} variant="body2">
+                      {line}
+                    </Typography>
+                  ))}
+                </div>
+              </Popup>
+            </React.Fragment>
+          )}
         </ReactMapGL>
       </div>
     );

@@ -16,7 +16,6 @@ import Typography from '@material-ui/core/Typography';
 
 import BistrotimeLogo from './images/logo.svg';
 import Place from './components/place';
-import Bar from './components/bar';
 import Map from './components/map';
 import { withCoordinates } from './utils';
 
@@ -153,9 +152,6 @@ class App extends React.Component {
           places={places}
         />
         <div className="Sidebar">
-          {!empty(bar)
-            && <Bar info={bar} />
-          }
           <Paper elevation={0} className="Places">
             <form onSubmit={this.searchBar}>
               <Fab
