@@ -40,7 +40,7 @@
     "notistack": "~0.8.5",
     "places.js": "~1.16.4",
     "prop-types": "~15.7.2",
-    "query-string": "~6.5.0",
+    "query-string": "~6.6.0",
     "react": "~16.8.6",
     "react-dom": "~16.8.6",
     "react-map-gl": "~5.0.0",
