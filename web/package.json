@@ -50,7 +50,7 @@
     "shortid": "~2.2.14",
     "style-loader": "~0.23.1",
     "viewport-mercator-project": "~6.1.1",
-    "webpack": "~4.34.0",
+    "webpack": "~4.35.1",
     "webpack-cli": "~3.3.2",
     "webpack-dev-server": "~3.7.0",
     "webpack-merge": "~4.2.1",
