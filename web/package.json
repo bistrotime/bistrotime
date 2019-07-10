@@ -46,7 +46,7 @@
     "react-map-gl": "~5.0.2",
     "react-sizeme": "~2.6.7",
     "sass-loader": "~7.1.0",
-    "serve": "~11.0.1",
+    "serve": "~11.1.0",
     "shortid": "~2.2.14",
     "style-loader": "~0.23.1",
     "viewport-mercator-project": "~6.1.1",
