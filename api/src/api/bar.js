@@ -2,6 +2,7 @@ import { Router } from 'express';
 import config from 'config';
 import { error } from '../utils/http';
 import compute from '../bistrotime';
+import navitia from '../lib/navitia';
 import { getPoints, inline } from '../utils/coordinates';
 import logger from '../logger';
 
@@ -37,5 +38,9 @@ api.get('/find', (req, res) => {
       error(res, 'Some services did not respond as expected');
     });
 });
+
+api.get('/test', (req, res) => {
+
+}
 
 export default api;

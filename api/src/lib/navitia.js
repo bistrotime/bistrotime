@@ -24,6 +24,8 @@ export default async function (from, to) {
   const journey = response.journeys.find(j => j.type === 'best');
   const { duration } = journey;
 
+  console.log(JSON.stringify(journey));
+
   logger.debug(
     'Journey duration between %s and %s is %d seconds with Navitia',
     from,
