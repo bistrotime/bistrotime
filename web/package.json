@@ -48,7 +48,7 @@
     "sass-loader": "~7.1.0",
     "serve": "~11.1.0",
     "shortid": "~2.2.14",
-    "style-loader": "~0.23.1",
+    "style-loader": "~1.0.0",
     "viewport-mercator-project": "~6.1.1",
     "webpack": "~4.35.3",
     "webpack-cli": "~3.3.5",
